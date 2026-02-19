@@ -2,12 +2,5 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": [
-    {
-      "path": "./access-backend-e2e"
-    },
-    {
-      "path": "./access-backend"
-    }
-  ]
+  "references": []
 }
