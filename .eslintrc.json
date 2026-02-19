@@ -1,6 +1,12 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "**/prisma/generated/**/*",
+    "**/client.d.ts",
+    "project.json"
+  ],
   "plugins": ["@nx"],
   "overrides": [
     {
