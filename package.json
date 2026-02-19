@@ -46,7 +46,6 @@
   },
   "workspaces": [
     "packages/*",
-    "access-backend",
-    "access-backend-e2e"
+    "apps/*"
   ]
 }
