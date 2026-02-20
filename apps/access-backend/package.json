@@ -4,6 +4,13 @@
   "private": true,
   "nx": {
     "targets": {
+      "prisma-generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx prisma generate",
+          "cwd": "apps/access-backend"
+        }
+      },
       "build": {
         "executor": "nx:run-commands",
         "options": {
