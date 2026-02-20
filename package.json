@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "db:seed": "cd apps/access-backend && npx prisma db seed"
+    "db:seed": "cd apps/access-backend && npx prisma db seed",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -40,9 +41,11 @@
     "@typescript-eslint/parser": "^7.16.0",
     "eslint": "~8.57.0",
     "eslint-config-prettier": "^10.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.2",
     "jest-environment-node": "^30.0.2",
     "jest-util": "^30.0.2",
+    "lint-staged": "^16.2.7",
     "nx": "22.5.1",
     "prettier": "^2.6.2",
     "ts-jest": "^29.4.0",
@@ -54,5 +57,10 @@
   "workspaces": [
     "packages/*",
     "apps/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md,html,css,scss}": [
+      "npx nx format:write"
+    ]
+  }
 }

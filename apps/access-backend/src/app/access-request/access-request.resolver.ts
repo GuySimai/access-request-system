@@ -11,7 +11,8 @@ export class AccessRequestResolver {
   async getAccessRequests(
     @Args('requestorId', { nullable: true }) requestorId?: string,
     @Args('subjectId', { nullable: true }) subjectId?: string,
-    @Args('status', { nullable: true, type: () => RequestStatus }) status?: RequestStatus,
+    @Args('status', { nullable: true, type: () => RequestStatus })
+    status?: RequestStatus
   ) {
     return this.service.getAccessRequests({ requestorId, subjectId, status });
   }
