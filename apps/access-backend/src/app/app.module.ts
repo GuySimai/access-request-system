@@ -10,8 +10,8 @@ import { AccessDecisionModule } from './access-decision/access-decision.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
-    AccessRequestModule, 
-    AccessDecisionModule
+    AccessRequestModule,
+    AccessDecisionModule,
   ],
   controllers: [],
   providers: [],
