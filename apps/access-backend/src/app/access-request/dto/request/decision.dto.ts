@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { RequestStatus } from '../../../../prisma/generated/client';
+import { RequestStatus } from '@prisma/client';
 
 export class DecisionDto {
   @ApiProperty({
