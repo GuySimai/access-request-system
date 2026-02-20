@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AccessRequestModule } from './access-request/access-request.module';
 import { AccessDecisionModule } from './access-decision/access-decision.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { AccessDecisionModule } from './access-decision/access-decision.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
+    AuthModule,
     AccessRequestModule,
     AccessDecisionModule,
   ],

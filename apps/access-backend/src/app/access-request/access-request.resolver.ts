@@ -1,13 +1,19 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { AccessRequestService } from './access-request.service';
 import { AccessRequest } from './models/access-request.model';
-import { RequestStatus } from '../../../prisma/generated/client';
+import { RequestStatus, Role } from '../../../prisma/generated/client';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Resolver(() => AccessRequest)
+@UseGuards(GqlAuthGuard, RolesGuard)
 export class AccessRequestResolver {
   constructor(private readonly service: AccessRequestService) {}
 
   @Query(() => [AccessRequest], { name: 'accessRequests' })
+  @Roles(Role.EMPLOYEE, Role.APPROVER)
   async getAccessRequests(
     @Args('requestorId', { nullable: true }) requestorId?: string,
     @Args('subjectId', { nullable: true }) subjectId?: string,

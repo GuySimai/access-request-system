@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
 import { CreateAccessRequestDto } from './dto/access-request.dto';
-import { RequestStatus } from '../../../prisma/generated/client';
+import { RequestStatus, Employee } from '../../../prisma/generated/client';
 
 @Injectable()
 export class AccessRequestService {
@@ -9,14 +9,18 @@ export class AccessRequestService {
 
   constructor(private prisma: PrismaService) {}
 
-  async createAccessRequest(requestorId: string, dto: CreateAccessRequestDto) {
+  async createAccessRequest(requestor: Employee, dto: CreateAccessRequestDto) {
     try {
+      const subject = await this.prisma.employee.findUnique({
+        where: { id: dto.subjectId },
+      });
+
       this.logger.log(
-        `Creating access request for subject ${dto.subjectId} by ${requestorId}`
+        `Creating access request for subject ${subject?.email} by ${requestor.email}`
       );
       await this.prisma.accessRequest.create({
         data: {
-          requestorId,
+          requestorId: requestor.id,
           subjectId: dto.subjectId,
           resource: dto.resource,
           reason: dto.reason,
@@ -26,7 +30,7 @@ export class AccessRequestService {
     } catch (error) {
       this.logger.error('Failed to create access request', {
         error: (error as Error).message,
-        requestorId,
+        requestorId: requestor.id,
         dto,
       });
       throw error;

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
-import { RequestStatus } from '../../../prisma/generated/client';
+import { RequestStatus, Employee } from '../../../prisma/generated/client';
 
 @Injectable()
 export class AccessDecisionService {
@@ -10,19 +10,19 @@ export class AccessDecisionService {
 
   async handleAccessRequestDecision(
     requestId: string,
-    approverId: string,
+    approver: Employee,
     status: RequestStatus
   ) {
     try {
       this.logger.log(
-        `Updating status of request ${requestId} to ${status} by approver ${approverId}`
+        `Updating status of request ${requestId} to ${status} by approver ${approver.email}`
       );
 
       return await this.prisma.accessRequest.update({
         where: { id: requestId },
         data: {
           status,
-          decisionBy: approverId,
+          decisionBy: approver.id,
           decisionAt: new Date(),
         },
       });
@@ -30,7 +30,7 @@ export class AccessDecisionService {
       this.logger.error('Failed to update access request status', {
         error: (error as Error).message,
         requestId,
-        approverId,
+        approverId: approver.id,
         status,
       });
 
