@@ -55,6 +55,12 @@
     }
   ],
   "targetDefaults": {
+    "typecheck": {
+      "dependsOn": ["prisma-generate", "^prisma-generate"]
+    },
+    "build": {
+      "dependsOn": ["prisma-generate", "^prisma-generate"]
+    },
     "test": {
       "dependsOn": ["^build"]
     }
