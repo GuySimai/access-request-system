@@ -62,7 +62,7 @@
       "dependsOn": ["prisma-generate", "^prisma-generate"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["prisma-generate", "^prisma-generate", "^build"]
     }
   }
 }
