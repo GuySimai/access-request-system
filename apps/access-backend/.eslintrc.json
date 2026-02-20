@@ -1,6 +1,6 @@
 {
   "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "dist", "out-tsc", "**/prisma/generated/**/*"],
+  "ignorePatterns": ["!**/*", "dist", "out-tsc", "**/prisma/generated/**/*", "node_modules"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
