@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Query, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Query,
+  Req,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiSecurity } from '@nestjs/swagger';
 import { AccessRequestService } from './access-request.service';
 import { CreateAccessRequestDto } from './dto/access-request.dto';
@@ -14,7 +23,10 @@ export class AccessRequestController {
   @Post()
   @ApiOperation({ summary: 'Create a new access request' })
   @HttpCode(HttpStatus.CREATED)
-  async createAccessRequest(@Req() { user }: IAuthorizedRequest, @Body() dto: CreateAccessRequestDto) {
+  async createAccessRequest(
+    @Req() { user }: IAuthorizedRequest,
+    @Body() dto: CreateAccessRequestDto
+  ) {
     await this.service.createAccessRequest(user.id, dto);
   }
 

@@ -8,10 +8,16 @@ export class AccessDecisionService {
 
   constructor(private prisma: PrismaService) {}
 
-  async handleAccessRequestDecision(requestId: string, approverId: string, status: RequestStatus) {
+  async handleAccessRequestDecision(
+    requestId: string,
+    approverId: string,
+    status: RequestStatus
+  ) {
     try {
-      this.logger.log(`Updating status of request ${requestId} to ${status} by approver ${approverId}`);
-      
+      this.logger.log(
+        `Updating status of request ${requestId} to ${status} by approver ${approverId}`
+      );
+
       return await this.prisma.accessRequest.update({
         where: { id: requestId },
         data: {
@@ -28,7 +34,7 @@ export class AccessDecisionService {
         status,
       });
 
-      throw  error;
+      throw error;
     }
   }
 }

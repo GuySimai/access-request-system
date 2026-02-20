@@ -39,7 +39,9 @@ async function main() {
       update: employee,
       create: employee,
     });
-    console.log(`✅ ${upserted.role}: ${upserted.name} (${upserted.email}) - ID: ${upserted.id}`);
+    console.log(
+      `✅ ${upserted.role}: ${upserted.name} (${upserted.email}) - ID: ${upserted.id}`
+    );
   }
 
   console.log('🚀 Seeding completed successfully!');

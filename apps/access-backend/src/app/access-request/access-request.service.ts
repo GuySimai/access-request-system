@@ -11,7 +11,9 @@ export class AccessRequestService {
 
   async createAccessRequest(requestorId: string, dto: CreateAccessRequestDto) {
     try {
-      this.logger.log(`Creating access request for subject ${dto.subjectId} by ${requestorId}`);
+      this.logger.log(
+        `Creating access request for subject ${dto.subjectId} by ${requestorId}`
+      );
       await this.prisma.accessRequest.create({
         data: {
           requestorId,
@@ -31,9 +33,15 @@ export class AccessRequestService {
     }
   }
 
-  async getAccessRequests(filters: { requestorId?: string; subjectId?: string; status?: RequestStatus }) {
+  async getAccessRequests(filters: {
+    requestorId?: string;
+    subjectId?: string;
+    status?: RequestStatus;
+  }) {
     try {
-      this.logger.log(`Retrieving requests with filters: ${JSON.stringify(filters)}`);
+      this.logger.log(
+        `Retrieving requests with filters: ${JSON.stringify(filters)}`
+      );
       return await this.prisma.accessRequest.findMany({
         where: {
           requestorId: filters.requestorId,

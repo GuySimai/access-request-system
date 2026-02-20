@@ -1,4 +1,13 @@
-import { Controller, Patch, Param, Body, Req, UnauthorizedException, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Patch,
+  Param,
+  Body,
+  Req,
+  UnauthorizedException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiSecurity } from '@nestjs/swagger';
 import { AccessDecisionService } from './access-decision.service';
 import { DecisionDto } from './dto/access-decision.dto';
@@ -20,7 +29,9 @@ export class AccessDecisionController {
     @Body() dto: DecisionDto
   ) {
     if (user.role !== Role.APPROVER) {
-      throw new UnauthorizedException('Only approvers can make decisions on requests');
+      throw new UnauthorizedException(
+        'Only approvers can make decisions on requests'
+      );
     }
     await this.service.handleAccessRequestDecision(id, user.id, dto.status);
   }
