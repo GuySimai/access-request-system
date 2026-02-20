@@ -1,7 +1,7 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { AccessRequestService } from './access-request.service';
 import { AccessRequest } from './models/access-request.model';
-import { RequestStatus, Role } from '../../../prisma/generated/client';
+import { RequestStatus, Role } from '@prisma/client';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';

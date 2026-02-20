@@ -64,7 +64,11 @@
     "apps/*"
   ],
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,md,html,css,scss}": [
+    "*.{ts,tsx,js,jsx}": [
+      "npx nx format:write",
+      "npx nx affected -t lint --fix"
+    ],
+    "*.{json,md,html,css,scss,yml}": [
       "npx nx format:write"
     ]
   }

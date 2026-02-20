@@ -1,6 +1,5 @@
-import { IsString, IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { RequestStatus } from '../../../../prisma/generated/client';
 
 export class CreateAccessRequestDto {
   @ApiProperty({
@@ -19,13 +18,4 @@ export class CreateAccessRequestDto {
   @IsString()
   @IsNotEmpty()
   reason!: string;
-}
-
-export class DecisionDto {
-  @ApiProperty({
-    enum: RequestStatus,
-    description: 'The decision (APPROVED or DENIED)',
-  })
-  @IsEnum(RequestStatus)
-  status!: RequestStatus;
 }
