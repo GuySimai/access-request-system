@@ -36,6 +36,12 @@ async function main() {
       password: '1234',
       role: Role.EMPLOYEE,
     },
+    {
+      email: 'test-user@monday.com',
+      name: 'Test User',
+      password: 'password123',
+      role: Role.EMPLOYEE,
+    },
   ];
 
   for (const employee of employees) {
