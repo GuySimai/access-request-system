@@ -68,7 +68,7 @@
       "npx nx format:write",
       "npx nx affected -t lint --fix"
     ],
-    "*.{json,md,html,css,scss}": [
+    "*.{json,md,html,css,scss,yml}": [
       "npx nx format:write"
     ]
   }
