@@ -93,9 +93,55 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.EmployeeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AccessRequestScalarFieldEnum = {
+  id: 'id',
+  requestorId: 'requestorId',
+  subjectId: 'subjectId',
+  resource: 'resource',
+  reason: 'reason',
+  status: 'status',
+  decisionBy: 'decisionBy',
+  decisionAt: 'decisionAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  EMPLOYEE: 'EMPLOYEE',
+  APPROVER: 'APPROVER'
+};
+
+exports.RequestStatus = exports.$Enums.RequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED'
+};
 
 exports.Prisma.ModelName = {
-
+  Employee: 'Employee',
+  AccessRequest: 'AccessRequest'
 };
 /**
  * Create the Client
@@ -148,13 +194,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/client\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n",
-  "inlineSchemaHash": "ae3da69e44a4949b7eec8da2810957c4b131003341cf06c6b6ba30c02d2590c2",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./generated/client\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  EMPLOYEE\n  APPROVER\n}\n\nenum RequestStatus {\n  PENDING\n  APPROVED\n  DENIED\n}\n\nmodel Employee {\n  id                 String          @id @default(uuid())\n  email              String          @unique\n  name               String\n  role               Role            @default(EMPLOYEE)\n  submittedRequests  AccessRequest[] @relation(\"RequestorRelation\")\n  requestsForSubject AccessRequest[] @relation(\"SubjectRelation\")\n  decisions          AccessRequest[] @relation(\"ApproverDecisions\")\n  createdAt          DateTime        @default(now())\n}\n\nmodel AccessRequest {\n  id String @id @default(uuid())\n\n  // Relations\n  requestor   Employee @relation(\"RequestorRelation\", fields: [requestorId], references: [id])\n  requestorId String\n\n  subject   Employee @relation(\"SubjectRelation\", fields: [subjectId], references: [id])\n  subjectId String\n\n  resource String\n  reason   String\n  status   RequestStatus @default(PENDING)\n\n  // Audit fields\n  approver   Employee? @relation(\"ApproverDecisions\", fields: [decisionBy], references: [id])\n  decisionBy String?\n  decisionAt DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([requestorId])\n  @@index([subjectId])\n  @@index([status])\n}\n",
+  "inlineSchemaHash": "0d5b57d7e80eedb2f9a60ce1dd1d73ea1dc38ef5bb5ab80badd3b13337e6aad4",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Employee\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"submittedRequests\",\"kind\":\"object\",\"type\":\"AccessRequest\",\"relationName\":\"RequestorRelation\"},{\"name\":\"requestsForSubject\",\"kind\":\"object\",\"type\":\"AccessRequest\",\"relationName\":\"SubjectRelation\"},{\"name\":\"decisions\",\"kind\":\"object\",\"type\":\"AccessRequest\",\"relationName\":\"ApproverDecisions\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"AccessRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"requestor\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"RequestorRelation\"},{\"name\":\"requestorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"SubjectRelation\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resource\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"RequestStatus\"},{\"name\":\"approver\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"ApproverDecisions\"},{\"name\":\"decisionBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"decisionAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

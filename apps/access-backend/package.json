@@ -87,12 +87,18 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@prisma/client": "^6.19.2",
+    "express": "^5.2.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.0",
-    "prisma": "^6.19.2"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "prisma": "^6.19.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

@@ -11,3 +11,52 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  EMPLOYEE
+  APPROVER
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  DENIED
+}
+
+model Employee {
+  id                 String          @id @default(uuid())
+  email              String          @unique
+  name               String
+  role               Role            @default(EMPLOYEE)
+  submittedRequests  AccessRequest[] @relation("RequestorRelation")
+  requestsForSubject AccessRequest[] @relation("SubjectRelation")
+  decisions          AccessRequest[] @relation("ApproverDecisions")
+  createdAt          DateTime        @default(now())
+}
+
+model AccessRequest {
+  id String @id @default(uuid())
+
+  // Relations
+  requestor   Employee @relation("RequestorRelation", fields: [requestorId], references: [id])
+  requestorId String
+
+  subject   Employee @relation("SubjectRelation", fields: [subjectId], references: [id])
+  subjectId String
+
+  resource String
+  reason   String
+  status   RequestStatus @default(PENDING)
+
+  // Audit fields
+  approver   Employee? @relation("ApproverDecisions", fields: [decisionBy], references: [id])
+  decisionBy String?
+  decisionAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([requestorId])
+  @@index([subjectId])
+  @@index([status])
+}
