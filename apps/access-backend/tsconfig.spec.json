@@ -3,6 +3,10 @@
   "compilerOptions": {
     "outDir": "./out-tsc/jest",
     "types": ["jest", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@prisma/client": ["prisma/generated/client"]
+    },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
