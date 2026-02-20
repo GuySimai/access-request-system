@@ -9,26 +9,31 @@ async function main() {
     {
       email: 'admin@monday.com',
       name: 'Admin User',
+      password: '1234',
       role: Role.APPROVER,
     },
     {
       email: 'employee1@monday.com',
       name: 'Employee One',
+      password: '1234',
       role: Role.EMPLOYEE,
     },
     {
       email: 'employee2@monday.com',
       name: 'Employee Two',
+      password: '1234',
       role: Role.EMPLOYEE,
     },
     {
       email: 'employee3@monday.com',
       name: 'Employee Three',
+      password: '1234',
       role: Role.EMPLOYEE,
     },
     {
       email: 'employee4@monday.com',
       name: 'Employee Four',
+      password: '1234',
       role: Role.EMPLOYEE,
     },
   ];
