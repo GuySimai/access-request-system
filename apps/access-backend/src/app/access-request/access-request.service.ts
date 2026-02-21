@@ -2,12 +2,20 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
 import { CreateAccessRequestDto } from './dto/request/create-access-request.dto';
 import { RequestStatus, Employee } from '@prisma/client';
+import { OpenAIService } from '../openai/openai.service';
+import {
+  AI_RECOMMENDATION_APPROVE,
+  AI_RECOMMENDATION_DENY,
+} from '../constants';
 
 @Injectable()
 export class AccessRequestService {
   private readonly logger = new Logger(AccessRequestService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private openaiService: OpenAIService
+  ) {}
 
   async createAccessRequest(requestor: Employee, dto: CreateAccessRequestDto) {
     try {
@@ -29,7 +37,7 @@ export class AccessRequestService {
         );
       }
 
-      await this.prisma.accessRequest.create({
+      const accessRequest = await this.prisma.accessRequest.create({
         data: {
           requestorId: requestor.id,
           subjectId: dto.subjectId,
@@ -38,6 +46,34 @@ export class AccessRequestService {
           status: RequestStatus.PENDING,
         },
       });
+
+      try {
+        const requestorWithMetadata = await this.prisma.employee.findUnique({
+          where: { id: requestor.id },
+          include: { metadata: true },
+        });
+        const subjectWithMetadata = await this.prisma.employee.findUnique({
+          where: { id: dto.subjectId },
+          include: { metadata: true },
+        });
+
+        await this.openaiService.analyzeRequest(
+          accessRequest.id,
+          requestor.email,
+          subject.email,
+          dto.resource,
+          dto.reason,
+          requestorWithMetadata?.metadata ?? undefined,
+          subjectWithMetadata?.metadata ?? undefined
+        );
+      } catch (aiError) {
+        this.logger.error(
+          'AI Analysis failed, but request was created',
+          aiError
+        );
+      }
+
+      return accessRequest;
     } catch (error) {
       this.logger.error('createAccessRequest', {
         requestorId: requestor.id,
@@ -52,17 +88,25 @@ export class AccessRequestService {
     requestorId?: string;
     subjectId?: string;
     status?: RequestStatus;
+    skip?: number;
+    take?: number;
   }) {
     try {
       this.logger.log('getAccessRequests', {
         payload: filters,
       });
+
+      const take = filters.take ?? 50;
+      const skip = filters.skip ?? 0;
+
       return await this.prisma.accessRequest.findMany({
         where: {
           requestorId: filters.requestorId,
           subjectId: filters.subjectId,
           status: filters.status,
         },
+        take,
+        skip,
         include: {
           requestor: {
             select: {
@@ -91,6 +135,7 @@ export class AccessRequestService {
               createdAt: true,
             },
           },
+          aiEvaluation: true,
         },
         orderBy: { createdAt: 'desc' },
       });
@@ -115,14 +160,35 @@ export class AccessRequestService {
         payload: { status },
       });
 
-      return await this.prisma.accessRequest.update({
+      const updatedRequest = await this.prisma.accessRequest.update({
         where: { id: requestId },
         data: {
           status,
           decisionBy: approver.id,
           decisionAt: new Date(),
         },
+        include: {
+          aiEvaluation: true,
+        },
       });
+
+      // Evaluation Signal: Compare human decision with AI recommendation
+      if (updatedRequest.aiEvaluation) {
+        const isCorrect =
+          (status === RequestStatus.APPROVED &&
+            updatedRequest.aiEvaluation.recommendation ===
+              AI_RECOMMENDATION_APPROVE) ||
+          (status === RequestStatus.DENIED &&
+            updatedRequest.aiEvaluation.recommendation ===
+              AI_RECOMMENDATION_DENY);
+
+        await this.prisma.aiEvaluation.update({
+          where: { id: updatedRequest.aiEvaluation.id },
+          data: { isCorrect },
+        });
+      }
+
+      return updatedRequest;
     } catch (error) {
       this.logger.error('handleAccessRequestDecision', {
         requestId,
@@ -138,6 +204,9 @@ export class AccessRequestService {
   async getAccessRequestById(id: string) {
     return this.prisma.accessRequest.findUnique({
       where: { id },
+      include: {
+        aiEvaluation: true,
+      },
     });
   }
 }
