@@ -1,8 +1,4 @@
-import {
-  getAccessRequestUserPrompt,
-  getAccessRequestMessages,
-  isValidAiRecommendation,
-} from '../utils';
+import { getAccessRequestUserPrompt, isValidAiRecommendation } from '../utils';
 import { EmployeeMetadata } from '@prisma/client';
 
 describe('OpenAI Utils', () => {
