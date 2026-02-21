@@ -1,13 +1,13 @@
-import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAccessRequestDto {
   @ApiProperty({
-    description: 'The ID of the employee who is the subject of the request',
+    description: 'The email of the employee who is the subject of the request',
   })
-  @IsUUID()
+  @IsEmail()
   @IsNotEmpty()
-  subjectId!: string;
+  subjectEmail!: string;
 
   @ApiProperty({ description: 'The resource to which access is requested' })
   @IsString()

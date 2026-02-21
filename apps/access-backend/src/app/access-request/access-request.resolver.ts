@@ -17,9 +17,17 @@ export class AccessRequestResolver {
   async getAccessRequests(
     @Args('requestorId', { nullable: true }) requestorId?: string,
     @Args('subjectId', { nullable: true }) subjectId?: string,
+    @Args('skip', { nullable: true, type: () => Number }) skip?: number,
+    @Args('take', { nullable: true, type: () => Number }) take?: number,
     @Args('status', { nullable: true, type: () => RequestStatus })
     status?: RequestStatus
   ) {
-    return this.service.getAccessRequests({ requestorId, subjectId, status });
+    return this.service.getAccessRequests({
+      requestorId,
+      subjectId,
+      status,
+      skip,
+      take,
+    });
   }
 }

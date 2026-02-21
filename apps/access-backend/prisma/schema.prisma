@@ -24,15 +24,26 @@ enum RequestStatus {
 }
 
 model Employee {
-  id                 String          @id @default(uuid())
-  email              String          @unique
+  id                 String            @id @default(uuid())
+  email              String            @unique
   name               String
-  password           String 
-  role               Role            @default(EMPLOYEE)
-  submittedRequests  AccessRequest[] @relation("RequestorRelation")
-  requestsForSubject AccessRequest[] @relation("SubjectRelation")
-  decisions          AccessRequest[] @relation("ApproverDecisions")
-  createdAt          DateTime        @default(now())
+  password           String
+  role               Role              @default(EMPLOYEE)
+  submittedRequests  AccessRequest[]   @relation("RequestorRelation")
+  requestsForSubject AccessRequest[]   @relation("SubjectRelation")
+  decisions          AccessRequest[]   @relation("ApproverDecisions")
+  metadata           EmployeeMetadata?
+  createdAt          DateTime          @default(now())
+}
+
+model EmployeeMetadata {
+  id                   String   @id @default(uuid())
+  employee             Employee @relation(fields: [employeeId], references: [id])
+  employeeId           String   @unique
+  department           String
+  jobTitle             String
+  tenureMonths         Int
+  updatedAt            DateTime @updatedAt
 }
 
 model AccessRequest {
@@ -50,7 +61,19 @@ model AccessRequest {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
+  aiEvaluation AiEvaluation?
+
   @@index([requestorId])
   @@index([subjectId])
   @@index([status])
+}
+
+model AiEvaluation {
+  id              String        @id @default(uuid())
+  requestId       String        @unique
+  accessRequest   AccessRequest @relation(fields: [requestId], references: [id])
+  recommendation  String        
+  reasoning       String        
+  confidenceScore Float         
+  createdAt       DateTime      @default(now())
 }

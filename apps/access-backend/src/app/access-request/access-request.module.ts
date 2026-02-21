@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { AccessRequestController } from './access-request.controller';
 import { AccessRequestService } from './access-request.service';
 import { AccessRequestResolver } from './access-request.resolver';
-import { PrismaService } from '../db/prisma.service';
+import { OpenAIModule } from '../openai/openai.module';
+import { PrismaModule } from '../db/prisma.module';
 
 @Module({
+  imports: [OpenAIModule, PrismaModule],
   controllers: [AccessRequestController],
-  providers: [AccessRequestService, AccessRequestResolver, PrismaService],
+  providers: [AccessRequestService, AccessRequestResolver],
   exports: [AccessRequestService],
 })
 export class AccessRequestModule {}

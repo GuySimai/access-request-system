@@ -3,6 +3,7 @@ import { AccessRequestService } from '../access-request.service';
 import { PrismaService } from '../../db/prisma.service';
 import { RequestStatus } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
+import { OpenAIService } from '../../openai/openai.service';
 
 describe('AccessRequestService', () => {
   let service: AccessRequestService;
@@ -20,11 +21,16 @@ describe('AccessRequestService', () => {
     },
   };
 
+  const mockOpenAIService = {
+    analyzeRequest: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AccessRequestService,
         { provide: PrismaService, useValue: mockPrisma },
+        { provide: OpenAIService, useValue: mockOpenAIService },
       ],
     }).compile();
 
@@ -37,9 +43,9 @@ describe('AccessRequestService', () => {
   });
 
   describe('createAccessRequest', () => {
-    const mockRequestor = { id: 'req-1', email: 'req@monday.com' };
+    const mockRequestor = { id: 'req-1', email: 'req@monday.com', name: 'Req' };
     const mockDto = {
-      subjectId: 'sub-1',
+      subjectEmail: 'sub@monday.com',
       resource: 'res-1',
       reason: 'need access',
     };
@@ -48,13 +54,14 @@ describe('AccessRequestService', () => {
       mockPrisma.employee.findUnique.mockResolvedValue({
         id: 'sub-1',
         email: 'sub@monday.com',
+        name: 'Sub',
       });
-      mockPrisma.accessRequest.create.mockResolvedValue({});
+      mockPrisma.accessRequest.create.mockResolvedValue({ id: 'acc-1' });
 
       await service.createAccessRequest(mockRequestor as any, mockDto);
 
       expect(prisma.employee.findUnique).toHaveBeenCalledWith({
-        where: { id: 'sub-1' },
+        where: { email: 'sub@monday.com' },
       });
       expect(prisma.accessRequest.create).toHaveBeenCalledWith({
         data: {
@@ -109,13 +116,15 @@ describe('AccessRequestService', () => {
       );
 
       expect(result.status).toBe(RequestStatus.APPROVED);
-      expect(prisma.accessRequest.update).toHaveBeenCalledWith({
-        where: { id: '1' },
-        data: expect.objectContaining({
-          status: RequestStatus.APPROVED,
-          decisionBy: 'app-1',
-        }),
-      });
+      expect(prisma.accessRequest.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: '1' },
+          data: expect.objectContaining({
+            status: RequestStatus.APPROVED,
+            decisionBy: 'app-1',
+          }),
+        })
+      );
     });
   });
 });
