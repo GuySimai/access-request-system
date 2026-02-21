@@ -1,3 +1,5 @@
 node_modules
 dist
 **/prisma/generated/**/*
+libs/access-sdk/src/client.d.ts
+libs/access-sdk/src/definition.json

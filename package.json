@@ -24,9 +24,9 @@
     "graphql": "^16.12.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "prisma": "^6.19.2",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.0",
-    "prisma": "^6.19.2"
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^11.0.0",
@@ -54,6 +54,7 @@
     "jest-util": "^30.0.2",
     "lint-staged": "^16.2.7",
     "nx": "22.5.1",
+    "openapi-client-axios": "^7.8.0",
     "prettier": "^2.6.2",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
@@ -74,7 +75,7 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "npx nx format:write",
-      "npx nx affected -t lint --fix"
+      "npx nx affected -t lint --fix=true"
     ],
     "*.{json,md,html,css,scss,yml}": [
       "npx nx format:write"

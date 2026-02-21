@@ -1,0 +1,31 @@
+{
+  "name": "access-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/access-sdk/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/access-sdk",
+        "main": "libs/access-sdk/src/index.ts",
+        "tsConfig": "libs/access-sdk/tsconfig.lib.json",
+        "assets": [
+          "libs/access-sdk/*.md",
+          "libs/access-sdk/src/definition.json",
+          "libs/access-sdk/src/client.d.ts"
+        ]
+      },
+      "dependsOn": ["access-backend:typegen"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/access-sdk/src/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

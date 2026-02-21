@@ -1,0 +1,7 @@
+{
+  "name": "@access-request-system/access-sdk",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts"
+}

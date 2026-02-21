@@ -86,6 +86,32 @@
         "options": {
           "passWithNoTests": true
         }
+      },
+      "swagger": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx ts-node -r tsconfig-paths/register -P apps/access-backend/tsconfig.app.json apps/access-backend/src/swagger.ts",
+          "cwd": "."
+        },
+        "dependsOn": [
+          "prisma-generate"
+        ]
+      },
+      "typegen": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx --yes -p openapi-client-axios-typegen typegen ./definition.json > ./client.d.ts",
+          "cwd": "libs/access-sdk/src"
+        },
+        "dependsOn": [
+          "swagger"
+        ]
+      },
+      "typesgen": {
+        "executor": "nx:noop",
+        "dependsOn": [
+          "typegen"
+        ]
       }
     }
   },
