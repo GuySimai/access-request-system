@@ -30,6 +30,9 @@ jobs:
       - name: Generate Prisma Client
         run: npx nx run @org/access-backend:prisma-generate
 
+      - name: Generate SDK Types
+        run: npx nx run @org/access-backend:typegen
+
       # Check format
       - run: npx nx format:check --base=origin/main
       - run: npx nx run-many -t lint test build typecheck e2e-ci
