@@ -3,7 +3,7 @@ import { Flex, Box, TextField, Button, Dropdown } from '@vibe/core';
 import { Search, Filter, Erase } from '@vibe/icons';
 import { STATUS_OPTIONS } from './constants';
 import type { FiltersProps } from './types';
-import { RequestStatus } from '../../../../types/access-request';
+import type { RequestStatus } from '../../../../types/access-request';
 
 export const FiltersComponent: React.FC<FiltersProps> = ({
   status,
@@ -45,11 +45,12 @@ export const FiltersComponent: React.FC<FiltersProps> = ({
           placeholder="All Statuses"
           options={STATUS_OPTIONS}
           value={STATUS_OPTIONS.find((opt) => opt.value === status)}
-          onChange={(opt: { value: RequestStatus }) => setStatus(opt?.value)}
+          onChange={(opt: { value: RequestStatus } | null) =>
+            setStatus(opt ? opt.value : undefined)
+          }
           size={Dropdown.sizes.SMALL}
           insideOverflowContainer
           menuPosition="fixed"
-          menuPortalTarget={document.body}
         />
       </Box>
       <Flex gap={Flex.gaps.XS}>

@@ -20,10 +20,13 @@ import {
   NavigationChevronRight,
 } from '@vibe/icons';
 import { getStatusColor, getConfidenceColor, formatDate } from './utils';
-import { REQUEST_STATUS, USER_ROLE } from '../../../../constants/access-request';
+import {
+  REQUEST_STATUS,
+  USER_ROLE,
+} from '../../../../constants/access-request';
 import { TABLE_COLUMNS } from './constants';
 import type { RequestsTableProps } from './types';
-import { AccessRequest } from '../../../../types/access-request';
+import type { AccessRequest } from '../../../../types/access-request';
 
 export const RequestsTable: React.FC<RequestsTableProps> = ({
   requests,
@@ -38,6 +41,7 @@ export const RequestsTable: React.FC<RequestsTableProps> = ({
   return (
     <Box className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-x-auto relative z-0">
       <Table
+        className="z-[9999]!important"
         columns={TABLE_COLUMNS}
         emptyState={
           <Flex
@@ -117,7 +121,11 @@ export const RequestsTable: React.FC<RequestsTableProps> = ({
                   </Flex>
                 </TableCell>
                 <TableCell>
-                  <Text type={Text.types.TEXT2} weight={Text.weights.MEDIUM}>
+                  <Text
+                    type={Text.types.TEXT2}
+                    weight={Text.weights.MEDIUM}
+                    tooltipProps={{ zIndex: 100000 }}
+                  >
                     {request.resource}
                   </Text>
                 </TableCell>
@@ -126,17 +134,46 @@ export const RequestsTable: React.FC<RequestsTableProps> = ({
                     type={Text.types.TEXT2}
                     className="truncate max-w-[380px] block"
                     title={request.reason}
+                    tooltipProps={{ zIndex: 100000 }}
                   >
                     {request.reason}
                   </Text>
                 </TableCell>
                 <TableCell>
                   {request.aiEvaluation ? (
-                    <Label
-                      text={`${Math.round(request.aiEvaluation.score * 100)}%`}
-                      color={getConfidenceColor(request.aiEvaluation.score)}
-                      kind={Label.kinds.FILL}
-                    />
+                    <Flex gap={Flex.gaps.XS} align={Flex.align.CENTER}>
+                      <Label
+                        text={`${Math.round(
+                          request.aiEvaluation.score * 100
+                        )}%`}
+                        color={getConfidenceColor(request.aiEvaluation.score)}
+                        kind={Label.kinds.FILL}
+                      />
+                      <Text
+                        type={Text.types.TEXT2}
+                        weight={Text.weights.MEDIUM}
+                      >
+                        {request.aiEvaluation.score >= 0.7
+                          ? 'Recommended'
+                          : 'Not Recommended'}
+                      </Text>
+                    </Flex>
+                  ) : (
+                    <Text type={Text.types.TEXT2} color={Text.colors.SECONDARY}>
+                      —
+                    </Text>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {request.aiEvaluation ? (
+                    <Text
+                      type={Text.types.TEXT2}
+                      className="truncate max-w-[380px] block"
+                      title={request.aiEvaluation.summary}
+                      tooltipProps={{ zIndex: 100000 }}
+                    >
+                      {request.aiEvaluation.summary}
+                    </Text>
                   ) : (
                     <Text type={Text.types.TEXT2} color={Text.colors.SECONDARY}>
                       —

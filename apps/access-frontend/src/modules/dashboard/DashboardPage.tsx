@@ -1,18 +1,20 @@
 import { Box, Flex, Heading, Text, Avatar, Button } from '@vibe/core';
 import { useState } from 'react';
-import { LogOut } from '@vibe/icons';
+import { LogOut, Add } from '@vibe/icons';
 import { useAccessRequests } from '../../queries/useAccessRequests';
 import { useApproveRequest } from '../../mutations/useApproveRequest';
 import { useAuth } from '../../providers/AuthProvider';
 import { FiltersComponent } from './components/Filters';
 import { RequestsTable } from './components/RequestsTable';
+import { RequestAccessModal } from './components/RequestAccessModal';
 import { REQUEST_STATUS } from '../../constants/access-request';
 import { ITEMS_PER_PAGE } from './constants';
-import { RequestStatus } from '../../types/access-request';
+import type { RequestStatus } from '../../types/access-request';
 
 export const DashboardPage = () => {
   const { user, logout } = useAuth();
   const [page, setPage] = useState(0);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const [statusInput, setStatusInput] = useState<RequestStatus | undefined>(
     undefined
   );
@@ -87,6 +89,14 @@ export const DashboardPage = () => {
           Access Requests
         </Heading>
         <Flex gap={Flex.gaps.MEDIUM} align={Flex.align.CENTER}>
+          <Button
+            onClick={() => setIsRequestModalOpen(true)}
+            leftIcon={Add}
+            size={Button.sizes.MEDIUM}
+            className="rounded-full! bg-indigo-600! hover:bg-indigo-700! shadow-sm hover:shadow-md transition-all font-bold!"
+          >
+            Request Access
+          </Button>
           <Flex
             gap={Flex.gaps.SMALL}
             align={Flex.align.CENTER}
@@ -139,6 +149,11 @@ export const DashboardPage = () => {
         onNextPage={handleNextPage}
         onPrevPage={handlePrevPage}
         hasNextPage={hasNextPage}
+      />
+
+      <RequestAccessModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
       />
     </Box>
   );

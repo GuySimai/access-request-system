@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { init, sdk } from '@sdk/access';
@@ -14,13 +13,11 @@ init(backendUrl);
 sdk.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root') as HTMLElement).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ToastProvider>
-    </QueryClientProvider>
-  </StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <ToastProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ToastProvider>
+  </QueryClientProvider>
 );
