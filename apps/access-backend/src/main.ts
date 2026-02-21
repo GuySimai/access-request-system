@@ -16,14 +16,19 @@ async function bootstrap() {
     })
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('Access Request System')
-    .setDescription('Internal service for managing application access requests')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(globalPrefix, app, document);
+  // Setup Swagger documentation (only in local development for security)
+  if (process.env.APP_ENV === 'local') {
+    const config = new DocumentBuilder()
+      .setTitle('Access Request System')
+      .setDescription(
+        'Internal service for managing application access requests'
+      )
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+  }
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
@@ -31,7 +36,10 @@ async function bootstrap() {
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
 
-  Logger.log(`GraphQL Playground: http://localhost:${port}/graphql`);
+  if (process.env.APP_ENV === 'local') {
+    Logger.log(`GraphQL Playground: http://localhost:${port}/graphql`);
+    Logger.log(`Swagger Documentation: http://localhost:${port}/docs`);
+  }
 }
 
 bootstrap();
