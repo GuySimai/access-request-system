@@ -36,3 +36,5 @@ jobs:
       # Check format
       - run: npx nx format:check --base=origin/main
       - run: npx nx run-many -t lint test build typecheck e2e-ci
+
+      # docker build and push
