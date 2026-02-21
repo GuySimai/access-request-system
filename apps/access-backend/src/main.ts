@@ -17,7 +17,7 @@ async function bootstrap() {
   );
 
   // Setup Swagger documentation (only in local development for security)
-  if (process.env.APP_ENV === 'local') {
+  if (process.env.NODE_ENV === 'local') {
     const config = new DocumentBuilder()
       .setTitle('Access Request System')
       .setDescription(
@@ -36,7 +36,7 @@ async function bootstrap() {
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
 
-  if (process.env.APP_ENV === 'local') {
+  if (process.env.NODE_ENV === 'local') {
     Logger.log(`GraphQL Playground: http://localhost:${port}/graphql`);
     Logger.log(`Swagger Documentation: http://localhost:${port}/docs`);
   }

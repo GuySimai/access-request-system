@@ -12,8 +12,8 @@ import { PrismaModule } from './db/prisma.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      playground: process.env.APP_ENV === 'local',
-      introspection: process.env.APP_ENV === 'local',
+      playground: process.env.NODE_ENV === 'local',
+      introspection: process.env.NODE_ENV === 'local',
     }),
     AuthModule,
     AccessRequestModule,

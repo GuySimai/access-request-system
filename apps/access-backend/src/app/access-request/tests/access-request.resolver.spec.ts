@@ -33,12 +33,16 @@ describe('AccessRequestResolver', () => {
         requestorId: 'req-1',
         subjectId: 'sub-1',
         status: RequestStatus.APPROVED,
+        skip: undefined,
+        take: undefined,
       };
       mockService.getAccessRequests.mockResolvedValue([]);
 
       await resolver.getAccessRequests(
         filters.requestorId,
         filters.subjectId,
+        undefined,
+        undefined,
         filters.status
       );
 
