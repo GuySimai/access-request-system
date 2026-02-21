@@ -19,6 +19,6 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: 'test-output/jest/coverage',
   moduleNameMapper: {
-    '^@prisma/client$': '<rootDir>/prisma/generated/client',
+    '^@prisma/client$': '<rootDir>/prisma/generated/client/index.js',
   },
 };
