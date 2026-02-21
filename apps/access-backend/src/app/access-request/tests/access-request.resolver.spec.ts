@@ -30,8 +30,8 @@ describe('AccessRequestResolver', () => {
   describe('getAccessRequests', () => {
     it('should call service.getAccessRequests with correct arguments', async () => {
       const filters = {
-        requestorId: 'req-1',
-        subjectId: 'sub-1',
+        requestorEmail: 'req-1',
+        subjectEmail: 'sub-1',
         status: RequestStatus.APPROVED,
         skip: undefined,
         take: undefined,
@@ -39,8 +39,8 @@ describe('AccessRequestResolver', () => {
       mockService.getAccessRequests.mockResolvedValue([]);
 
       await resolver.getAccessRequests(
-        filters.requestorId,
-        filters.subjectId,
+        filters.requestorEmail,
+        filters.subjectEmail,
         undefined,
         undefined,
         filters.status
@@ -55,9 +55,11 @@ describe('AccessRequestResolver', () => {
       await resolver.getAccessRequests();
 
       expect(service.getAccessRequests).toHaveBeenCalledWith({
-        requestorId: undefined,
-        subjectId: undefined,
+        requestorEmail: undefined,
+        subjectEmail: undefined,
         status: undefined,
+        skip: undefined,
+        take: undefined,
       });
     });
   });
