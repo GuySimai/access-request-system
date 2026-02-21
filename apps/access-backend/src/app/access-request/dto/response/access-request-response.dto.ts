@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus } from '@access/prisma';
 
 export class AccessRequestResponseDto {
   @ApiProperty({ example: 'uuid-123' })

@@ -24,7 +24,7 @@ import { CreateAccessRequestDto } from './dto/request/create-access-request.dto'
 import { DecisionDto } from './dto/request/decision.dto';
 import { GetAccessRequestsDto } from './dto/request/get-access-requests.dto';
 import { AccessRequestResponseDto } from './dto/response/access-request-response.dto';
-import { Role, Employee } from '@prisma/client';
+import { Role, Employee } from '@access/prisma';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -51,7 +51,7 @@ export class AccessRequestController {
   }
 
   @Get()
-  @Roles('APPROVER')
+  @Roles(Role.EMPLOYEE, Role.APPROVER)
   @ApiOperation({ summary: 'Retrieve access requests with filters' })
   @ApiOkResponse({ type: [AccessRequestResponseDto] })
   async getAccessRequests(

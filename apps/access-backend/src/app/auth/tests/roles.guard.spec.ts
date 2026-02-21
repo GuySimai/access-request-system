@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RolesGuard } from '../guards/roles.guard';
 import { Reflector } from '@nestjs/core';
 import { ExecutionContext, ForbiddenException } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { Role } from '@access/prisma';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;

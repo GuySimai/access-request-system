@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccessRequestController } from '../access-request.controller';
 import { AccessRequestService } from '../access-request.service';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus, Employee, Role } from '@access/prisma';
 import { NotFoundException } from '@nestjs/common';
 
 describe('AccessRequestController', () => {
@@ -31,12 +31,16 @@ describe('AccessRequestController', () => {
 
   describe('createAccessRequest', () => {
     it('should call service.createAccessRequest', async () => {
-      const mockUser = { id: '1', email: 'test@monday.com' };
-      const mockDto = { subjectId: '2', resource: 'res', reason: 'reason' };
+      const mockUser: Partial<Employee> = { id: '1', email: 'test@monday.com' };
+      const mockDto = {
+        subjectEmail: '2@monday.com',
+        resource: 'res',
+        reason: 'reason',
+      };
 
       await controller.createAccessRequest(
-        { user: mockUser } as any,
-        mockDto as any
+        { user: mockUser as Employee },
+        mockDto
       );
 
       expect(service.createAccessRequest).toHaveBeenCalledWith(
@@ -51,23 +55,27 @@ describe('AccessRequestController', () => {
       const mockQuery = { status: RequestStatus.PENDING };
       mockService.getAccessRequests.mockResolvedValue([]);
 
-      await controller.getAccessRequests(mockQuery as any);
+      await controller.getAccessRequests(mockQuery);
 
       expect(service.getAccessRequests).toHaveBeenCalledWith(mockQuery);
     });
   });
 
   describe('handleAccessRequestDecision', () => {
-    const mockUser = { id: 'app-1', email: 'admin@monday.com' };
+    const mockUser: Partial<Employee> = {
+      id: 'app-1',
+      email: 'admin@monday.com',
+      role: Role.APPROVER,
+    };
     const mockDto = { status: RequestStatus.APPROVED };
 
     it('should update decision if request exists', async () => {
       mockService.getAccessRequestById.mockResolvedValue({ id: '1' });
 
       await controller.handleAccessRequestDecision(
-        { user: mockUser } as any,
+        { user: mockUser as Employee },
         '1',
-        mockDto as any
+        mockDto
       );
 
       expect(service.handleAccessRequestDecision).toHaveBeenCalledWith(
@@ -82,9 +90,9 @@ describe('AccessRequestController', () => {
 
       await expect(
         controller.handleAccessRequestDecision(
-          { user: mockUser } as any,
+          { user: mockUser as Employee },
           '1',
-          mockDto as any
+          mockDto
         )
       ).rejects.toThrow(NotFoundException);
     });

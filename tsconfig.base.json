@@ -18,6 +18,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@org/source"]
+    "customConditions": ["@org/source"],
+    "baseUrl": ".",
+    "paths": {
+      "@sdk/access": ["libs/access-sdk/src/index.ts"],
+      "@access/prisma": ["apps/access-backend/prisma/generated/client"],
+      "@/*": ["apps/access-frontend/src/*"]
+    }
   }
 }

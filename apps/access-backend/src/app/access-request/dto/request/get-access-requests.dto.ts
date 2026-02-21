@@ -1,18 +1,16 @@
-import { IsOptional, IsEnum, IsUUID, IsInt, Min, Max } from 'class-validator';
+import { IsOptional, IsEnum, IsInt, Min, Max } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus } from '@access/prisma';
 import { Type } from 'class-transformer';
 
 export class GetAccessRequestsDto {
-  @ApiPropertyOptional({ description: 'Filter by requestor ID' })
+  @ApiPropertyOptional({ description: 'Filter by requestor email' })
   @IsOptional()
-  @IsUUID()
-  requestorId?: string;
+  requestorEmail?: string;
 
-  @ApiPropertyOptional({ description: 'Filter by subject ID' })
+  @ApiPropertyOptional({ description: 'Filter by subject email' })
   @IsOptional()
-  @IsUUID()
-  subjectId?: string;
+  subjectEmail?: string;
 
   @ApiPropertyOptional({
     enum: RequestStatus,

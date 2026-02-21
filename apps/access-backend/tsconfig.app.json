@@ -4,10 +4,6 @@
     "outDir": "dist",
     "types": ["node"],
     "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@prisma/client": ["prisma/generated/client"]
-    },
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

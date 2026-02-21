@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": ["@access/prisma", "@/App.tsx"],
             "depConstraints": [
               {
                 "sourceTag": "*",
@@ -24,7 +24,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "rules": {
+        "react-refresh/only-export-components": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

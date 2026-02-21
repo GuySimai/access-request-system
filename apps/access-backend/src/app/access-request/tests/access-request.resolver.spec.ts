@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccessRequestResolver } from '../access-request.resolver';
 import { AccessRequestService } from '../access-request.service';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus } from '@access/prisma';
 
 describe('AccessRequestResolver', () => {
   let resolver: AccessRequestResolver;

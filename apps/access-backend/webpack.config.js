@@ -9,6 +9,11 @@ module.exports = {
       devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     }),
   },
+  resolve: {
+    alias: {
+      '@access/prisma': join(__dirname, 'prisma/generated/client'),
+    },
+  },
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',

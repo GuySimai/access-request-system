@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import OpenAI from 'openai';
 import { AiRecommendation, ChatMessage, ResponseFormat } from './types';
 import { PrismaService } from '../db/prisma.service';
-import { EmployeeMetadata } from '@prisma/client';
+import { EmployeeMetadata } from '@access/prisma';
 import {
   ACCESS_REQUEST_RESPONSE_FORMAT,
   ACCESS_REQUEST_SYSTEM_PROMPT,

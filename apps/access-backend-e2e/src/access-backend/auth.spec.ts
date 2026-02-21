@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 describe('Auth (E2E)', () => {
   const TEST_USER_EMAIL = 'test-user@monday.com';
@@ -22,10 +22,13 @@ describe('Auth (E2E)', () => {
           email: TEST_USER_EMAIL,
           password: 'wrongpassword',
         });
-        fail('Should have thrown an error');
-      } catch (error: any) {
-        expect(error.response.status).toBe(401);
-        expect(error.response.data.message).toBe('Invalid email or password');
+        throw new Error('Should have thrown an error');
+      } catch (error) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        expect(axiosError.response?.status).toBe(401);
+        expect(axiosError.response?.data?.message).toBe(
+          'Invalid email or password'
+        );
       }
     });
   });
