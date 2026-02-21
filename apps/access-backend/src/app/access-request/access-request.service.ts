@@ -172,22 +172,6 @@ export class AccessRequestService {
         },
       });
 
-      // Evaluation Signal: Compare human decision with AI recommendation
-      if (updatedRequest.aiEvaluation) {
-        const isCorrect =
-          (status === RequestStatus.APPROVED &&
-            updatedRequest.aiEvaluation.recommendation ===
-              AI_RECOMMENDATION_APPROVE) ||
-          (status === RequestStatus.DENIED &&
-            updatedRequest.aiEvaluation.recommendation ===
-              AI_RECOMMENDATION_DENY);
-
-        await this.prisma.aiEvaluation.update({
-          where: { id: updatedRequest.aiEvaluation.id },
-          data: { isCorrect },
-        });
-      }
-
       return updatedRequest;
     } catch (error) {
       this.logger.error('handleAccessRequestDecision', {

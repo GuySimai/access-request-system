@@ -5,7 +5,6 @@ CREATE TABLE "AiEvaluation" (
     "recommendation" TEXT NOT NULL,
     "reasoning" TEXT NOT NULL,
     "confidenceScore" DOUBLE PRECISION NOT NULL,
-    "isCorrect" BOOLEAN,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "AiEvaluation_pkey" PRIMARY KEY ("id")

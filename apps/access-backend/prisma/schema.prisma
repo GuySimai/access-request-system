@@ -75,6 +75,5 @@ model AiEvaluation {
   recommendation  String        
   reasoning       String        
   confidenceScore Float         
-  isCorrect       Boolean?      // Was the AI recommendation followed by a human?
   createdAt       DateTime      @default(now())
 }
