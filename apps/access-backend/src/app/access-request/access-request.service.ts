@@ -3,10 +3,6 @@ import { PrismaService } from '../db/prisma.service';
 import { CreateAccessRequestDto } from './dto/request/create-access-request.dto';
 import { RequestStatus, Employee } from '@prisma/client';
 import { OpenAIService } from '../openai/openai.service';
-import {
-  AI_RECOMMENDATION_APPROVE,
-  AI_RECOMMENDATION_DENY,
-} from '../constants';
 
 @Injectable()
 export class AccessRequestService {
@@ -25,22 +21,22 @@ export class AccessRequestService {
       });
 
       const subject = await this.prisma.employee.findUnique({
-        where: { id: dto.subjectId },
+        where: { email: dto.subjectEmail },
       });
 
       if (!subject) {
         this.logger.error('createAccessRequest - subject not found', {
-          payload: { subjectId: dto.subjectId },
+          payload: { subjectEmail: dto.subjectEmail },
         });
         throw new NotFoundException(
-          `Subject employee with ID ${dto.subjectId} not found`
+          `Subject employee with email ${dto.subjectEmail} not found`
         );
       }
 
       const accessRequest = await this.prisma.accessRequest.create({
         data: {
           requestorId: requestor.id,
-          subjectId: dto.subjectId,
+          subjectId: subject.id,
           resource: dto.resource,
           reason: dto.reason,
           status: RequestStatus.PENDING,
@@ -53,7 +49,7 @@ export class AccessRequestService {
           include: { metadata: true },
         });
         const subjectWithMetadata = await this.prisma.employee.findUnique({
-          where: { id: dto.subjectId },
+          where: { id: subject.id },
           include: { metadata: true },
         });
 
