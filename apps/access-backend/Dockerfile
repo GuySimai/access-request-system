@@ -17,6 +17,7 @@ FROM docker.io/node:lts-alpine AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /app/apps/access-backend/dist .
+COPY --from=build /app/apps/access-backend/package.json .
 RUN npm install --only=production
 COPY --from=build /app/apps/access-backend/prisma ./apps/access-backend/prisma
 CMD [ "node", "main.js" ]
