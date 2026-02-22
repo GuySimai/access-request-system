@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Text, Avatar, Button } from '@vibe/core';
 import { useState } from 'react';
 import { LogOut, Add } from '@vibe/icons';
-import { useAccessRequests } from '../../queries/useAccessRequests';
+import { useAccessRequestsGql } from '../../queries/useAccessRequestsGql';
 import { useApproveRequest } from '../../mutations/useApproveRequest';
 import { useAuth } from '../../providers/AuthProvider';
 import { FiltersComponent } from './components/Filters';
@@ -27,7 +27,7 @@ export const DashboardPage = () => {
     subjectEmail: '',
   });
 
-  const { data: requests, isLoading } = useAccessRequests({
+  const { data: requests, isLoading } = useAccessRequestsGql({
     status: appliedFilters.status,
     requestorEmail: appliedFilters.requestorEmail || undefined,
     subjectEmail: appliedFilters.subjectEmail || undefined,

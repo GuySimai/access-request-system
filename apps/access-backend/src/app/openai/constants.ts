@@ -1,8 +1,14 @@
-import { AI_RECOMMENDATIONS } from '../constants';
 import { ResponseFormat } from './types';
 
+export const AI_RECOMMENDATION_APPROVE = 'APPROVE';
+export const AI_RECOMMENDATION_DENY = 'DENY';
+export const AI_RECOMMENDATIONS = [
+  AI_RECOMMENDATION_APPROVE,
+  AI_RECOMMENDATION_DENY,
+];
+
 export const DEFAULT_OPENAI_MODEL = 'gpt-4o';
-export const DEFAULT_TEMPERATURE = 0.3;
+export const DEFAULT_TEMPERATURE = 0.1;
 
 export const OPENAI_ROLE_SYSTEM = 'system';
 export const OPENAI_ROLE_USER = 'user';
@@ -11,12 +17,11 @@ export const ACCESS_REQUEST_SYSTEM_PROMPT = `You are an AI security assistant sp
 
 # YOUR ROLE:
 Analyze access requests where one employee (the requestor) is asking for access to a specific resource for themselves or another employee (the subject).
-IMPORTANT: It is a standard and supported procedure for an employee to submit a request on behalf of another employee.
 
 # INPUTS YOU WILL RECEIVE:
 - Requestor Email and Profile: The identity, department, job title, and tenure of the person making the request.
 - Subject Email and Profile: The identity, department, job title, and tenure of the person who will receive the access.
-- Resource: The system, database, or tool being requested.
+- Resource: The app, system, database, or tool being requested.
 - Reason: The justification provided by the requestor.
 
 # YOUR TASK:

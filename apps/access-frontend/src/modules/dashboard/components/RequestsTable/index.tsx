@@ -144,16 +144,19 @@ export const RequestsTable: React.FC<RequestsTableProps> = ({
                     <Flex gap={Flex.gaps.XS} align={Flex.align.CENTER}>
                       <Label
                         text={`${Math.round(
-                          request.aiEvaluation.score * 100
+                          request.aiEvaluation.confidenceScore * 100
                         )}%`}
-                        color={getConfidenceColor(request.aiEvaluation.score)}
+                        color={getConfidenceColor(
+                          request.aiEvaluation.confidenceScore
+                        )}
                         kind={Label.kinds.FILL}
+                        className="w-16 flex justify-center"
                       />
                       <Text
                         type={Text.types.TEXT2}
                         weight={Text.weights.MEDIUM}
                       >
-                        {request.aiEvaluation.score >= 0.7
+                        {request.aiEvaluation.recommendation === 'APPROVE'
                           ? 'Recommended'
                           : 'Not Recommended'}
                       </Text>
@@ -169,10 +172,10 @@ export const RequestsTable: React.FC<RequestsTableProps> = ({
                     <Text
                       type={Text.types.TEXT2}
                       className="truncate max-w-[380px] block"
-                      title={request.aiEvaluation.summary}
+                      title={request.aiEvaluation.reasoning}
                       tooltipProps={{ zIndex: 100000 }}
                     >
-                      {request.aiEvaluation.summary}
+                      {request.aiEvaluation.reasoning}
                     </Text>
                   ) : (
                     <Text type={Text.types.TEXT2} color={Text.colors.SECONDARY}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { TextField, Button, Heading, Text, Box, Flex, Icon } from '@vibe/core';
-import { Key, Email } from '@vibe/icons';
+import { TextField, Button, Heading, Text, Box, Flex } from '@vibe/core';
+import { Email } from '@vibe/icons';
 import { useLogin } from '../../mutations/useLogin';
 
 export const LoginPage = () => {
@@ -34,8 +34,12 @@ export const LoginPage = () => {
             align={Flex.align.CENTER}
             gap={Flex.gaps.SMALL}
           >
-            <Box className="bg-blue-600 text-white rounded-full p-6 mb-6 shadow-lg">
-              <Icon icon={Key} iconSize={48} />
+            <Box className="mb-6">
+              <img
+                src="/access-general-house-key-svgrepo-com.svg"
+                alt="Access Request Logo"
+                className="w-24 h-24"
+              />
             </Box>
             <Heading
               type={Heading.types.H1}
@@ -101,7 +105,7 @@ export const LoginPage = () => {
 
       <Box marginTop={Box.margins.XL}>
         <Text type={Text.types.TEXT2} color={Text.colors.SECONDARY}>
-          © 2024 Access Request System
+          © 2026 Access Request System
         </Text>
       </Box>
     </Flex>

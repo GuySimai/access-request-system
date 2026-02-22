@@ -1,5 +1,5 @@
 import { ChatMessage } from './types';
-import { AI_RECOMMENDATIONS } from '../constants';
+import { AI_RECOMMENDATIONS } from './constants';
 import { AiRecommendation } from './types';
 import { EmployeeMetadata } from '@access/prisma';
 

@@ -112,12 +112,6 @@
         "dependsOn": [
           "swagger"
         ]
-      },
-      "typesgen": {
-        "executor": "nx:noop",
-        "dependsOn": [
-          "typegen"
-        ]
       }
     }
   },

@@ -1,8 +1,5 @@
 import OpenAI from 'openai';
-import {
-  AI_RECOMMENDATION_APPROVE,
-  AI_RECOMMENDATION_DENY,
-} from '../constants';
+import { AI_RECOMMENDATION_APPROVE, AI_RECOMMENDATION_DENY } from './constants';
 
 export type ChatMessage = OpenAI.Chat.ChatCompletionMessageParam;
 export type ResponseFormat =

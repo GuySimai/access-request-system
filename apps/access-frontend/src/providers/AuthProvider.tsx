@@ -1,11 +1,12 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { sdk } from '@sdk/access';
+import { USER_ROLE } from '../constants/access-request';
 
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'EMPLOYEE' | 'APPROVER';
+  role: keyof typeof USER_ROLE;
 }
 
 interface AuthContextType {
