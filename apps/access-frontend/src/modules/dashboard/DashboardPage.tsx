@@ -83,11 +83,18 @@ export const DashboardPage = () => {
       <Flex
         justify={Flex.justify.SPACE_BETWEEN}
         align={Flex.align.CENTER}
-        className="mb-8"
+        className="mb-8 select-none"
       >
-        <Heading type={Heading.types.H2} weight={Heading.weights.BOLD}>
-          Access Requests
-        </Heading>
+        <Flex gap={Flex.gaps.SMALL} align={Flex.align.CENTER}>
+          <img
+            src="/access-general-house-key-svgrepo-com.svg"
+            alt="Logo"
+            className="w-8 h-8"
+          />
+          <Heading type={Heading.types.H2} weight={Heading.weights.BOLD}>
+            Access Requests
+          </Heading>
+        </Flex>
         <Flex gap={Flex.gaps.MEDIUM} align={Flex.align.CENTER}>
           <Button
             onClick={() => setIsRequestModalOpen(true)}
