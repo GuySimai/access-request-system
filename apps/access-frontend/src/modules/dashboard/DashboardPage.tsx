@@ -9,7 +9,7 @@ import { RequestsTable } from './components/RequestsTable';
 import { RequestAccessModal } from './components/RequestAccessModal';
 import { REQUEST_STATUS } from '../../constants/access-request';
 import { ITEMS_PER_PAGE } from './constants';
-import { RequestStatus } from '../../types/access-request';
+import type { RequestStatus } from '../../types/access-request';
 
 export const DashboardPage = () => {
   const { user, logout } = useAuth();

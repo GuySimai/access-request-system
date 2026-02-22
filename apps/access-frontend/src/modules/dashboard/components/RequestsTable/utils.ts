@@ -1,6 +1,6 @@
 import { Label } from '@vibe/core';
 import { REQUEST_STATUS } from '../../../../constants/access-request';
-import { RequestStatus } from '../../../../types/access-request';
+import type { RequestStatus } from '../../../../types/access-request';
 
 export const getStatusColor = (status: RequestStatus) => {
   switch (status) {
