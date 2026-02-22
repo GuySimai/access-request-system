@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - 'access-request-system/apps/access-frontend/**'
-      - 'access-request-system/libs/access-sdk/**'
-      - 'access-request-system/package.json'
-      - 'access-request-system/package-lock.json'
+      - 'apps/access-frontend/**'
+      - 'libs/access-sdk/**'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
     paths:
-      - 'access-request-system/apps/access-frontend/**'
-      - 'access-request-system/libs/access-sdk/**'
+      - 'apps/access-frontend/**'
+      - 'libs/access-sdk/**'
 
 permissions:
   actions: read
