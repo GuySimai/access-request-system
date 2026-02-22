@@ -196,7 +196,7 @@ This section outlines a modern GitOps deployment strategy for the Access Request
 graph TD
     subgraph "CI/CD Pipeline"
         Dev[Developer] -->|Push Code| GitHub[GitHub Repo]
-        GitHub -->|Trigger CI| CI[CI Pipeline (GitHub Actions)]
+        GitHub -->|Trigger CI| CI["CI Pipeline (GitHub Actions)"]
         CI -->|Build & Push Image| ECR[Amazon ECR]
         CI -->|Update Manifest| GitHub
     end
