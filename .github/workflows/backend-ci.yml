@@ -43,3 +43,7 @@ jobs:
 
       - name: Run Backend Checks
         run: npx nx run-many -t lint test build typecheck e2e-ci --projects=@org/access-backend,access-sdk,@org/access-backend-e2e
+
+      - name: Verify Docker Build
+        run: |
+          docker build -t access-backend:test -f apps/access-backend/Dockerfile .
