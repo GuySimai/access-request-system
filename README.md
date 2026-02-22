@@ -95,6 +95,7 @@ erDiagram
         DateTime createdAt
     }
 ```
+
 ## Screenshots
 
 <div align="center">
@@ -102,7 +103,6 @@ erDiagram
   <br/><br/>
   <img width="100%" alt="Dashboard" src="https://github.com/user-attachments/assets/bddcaaea-a815-4a32-b4f9-e6b6f3882bee" />
 </div>
-
 
 ## Key Architectural Decisions and Assumptions
 
@@ -195,6 +195,19 @@ You can log in using the following seeded accounts:
 
 - **Admin** (`admin@monday.com` / Password: `1234`): Has an **APPROVER** role. Can view all access requests in the system and has the authority to approve or deny them.
 - **Employee** (`employee1@monday.com` / Password: `1234`): Has an **EMPLOYEE** role. Can create new access requests and view only the requests they have submitted or those where they are the subject.
+
+## API Endpoints & Interface
+
+The system uses a **Hybrid Architecture** combining REST and GraphQL to optimize for both simple actions and complex data requirements. In the AWS deployment, the **Application Load Balancer (ALB)** routes traffic to these endpoints.
+
+| Method  | Endpoint                   | Type        | Description                                                                  |
+| :------ | :------------------------- | :---------- | :--------------------------------------------------------------------------- |
+| `POST`  | `/api/auth/login`          | **REST**    | User authentication (returns JWT).                                           |
+| `POST`  | `/api/access-requests`     | **REST**    | Submit a new access request.                                                 |
+| `PATCH` | `/api/access-requests/:id` | **REST**    | Approve or Deny a request (Approver only).                                   |
+| `POST`  | `/graphql`                 | **GraphQL** | Fetching access requests with rich relationships, filtering, and pagination. |
+| `GET`   | `/api/access-requests`     | **REST**    | Fetching access requests (Simple list/filter).                               |
+| `GET`   | `/api/health`              | **REST**    | Health check used by AWS Target Groups for auto-scaling.                     |
 
 ## Example and Explanation of Deployment to AWS (Kubernetes & ArgoCD)
 
