@@ -1,4 +1,4 @@
-FROM docker.io/node:lts-alpine AS base
+FROM node:lts AS base
 ENV APP_NAME=access-backend
 
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN npx nx build access-backend
 
 
 ###### PRODUCTION ######
-FROM docker.io/node:lts-alpine AS runtime
+FROM node:lts AS runtime
 
 ENV NODE_ENV=production
 WORKDIR /app
