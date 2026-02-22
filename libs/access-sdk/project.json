@@ -17,7 +17,7 @@
           "libs/access-sdk/src/client.d.ts"
         ]
       },
-      "dependsOn": ["access-backend:typegen"]
+      "dependsOn": ["@org/access-backend:typegen"]
     },
     "lint": {
       "executor": "@nx/eslint:lint",
