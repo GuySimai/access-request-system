@@ -198,7 +198,7 @@ You can log in using the following seeded accounts:
 
 ## API Endpoints & Interface
 
-The system uses a **Hybrid Architecture** combining REST and GraphQL to optimize for both simple actions and complex data requirements. In the AWS deployment, the **Application Load Balancer (ALB)** routes traffic to these endpoints.
+The system uses a **Hybrid Architecture** combining REST and GraphQL to optimize for both simple actions and complex data requirements.
 
 | Method  | Endpoint                   | Type        | Description                                                                  |
 | :------ | :------------------------- | :---------- | :--------------------------------------------------------------------------- |
