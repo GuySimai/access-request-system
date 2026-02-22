@@ -211,7 +211,7 @@ graph TD
             end
         end
 
-        SSM[AWS Systems Manager\nParameter Store]
+        SSM[Parameter Store]
         ESO[External Secrets Operator]
     end
 
@@ -229,7 +229,7 @@ graph TD
 
     - Code is pushed to **GitHub**.
     - A CI pipeline (e.g., GitHub Actions) builds the Docker image and pushes it to **Amazon ECR**.
-    - The pipeline updates the Kubernetes manifests (Helm/Kustomize) in the repository with the new image tag.
+    - The pipeline updates the Kubernetes manifests (Kustomize) in the repository with the new image tag.
 
 2.  **CD Process (GitOps)**:
 
