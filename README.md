@@ -95,6 +95,11 @@ erDiagram
         DateTime createdAt
     }
 ```
+## Screenshots
+<img width="633" height="683" alt="Screenshot 2026-02-22 at 23 52 39" src="https://github.com/user-attachments/assets/a73c967a-7924-4f2a-b43d-d3327e5f92d7" />
+
+<img width="1900" height="900" alt="Screenshot 2026-02-22 at 23 52 22" src="https://github.com/user-attachments/assets/bddcaaea-a815-4a32-b4f9-e6b6f3882bee" />
+
 
 ## Key Architectural Decisions and Assumptions
 
