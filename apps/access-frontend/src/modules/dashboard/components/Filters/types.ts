@@ -1,4 +1,4 @@
-import type { RequestStatus } from '../../../../types/access-request';
+import { RequestStatus } from '../../../../types/access-request';
 
 export interface FiltersProps {
   status?: RequestStatus;

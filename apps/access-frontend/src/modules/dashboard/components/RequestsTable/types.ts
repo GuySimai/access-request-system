@@ -1,5 +1,5 @@
 import { REQUEST_STATUS } from '../../../../constants/access-request';
-import type { AccessRequest, UserRole } from '../../../../types/access-request';
+import { AccessRequest, UserRole } from '../../../../types/access-request';
 
 export interface RequestsTableProps {
   requests: AccessRequest[] | undefined;

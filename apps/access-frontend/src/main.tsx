@@ -8,7 +8,7 @@ import App from '@/App.tsx';
 import '@vibe/core/tokens';
 import './index.css';
 
-const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const backendUrl = import.meta.env.VITE_API_URL;
 init(backendUrl);
 sdk.defaults.withCredentials = true;
 

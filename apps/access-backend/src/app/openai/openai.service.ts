@@ -6,6 +6,8 @@ import { EmployeeMetadata } from '@access/prisma';
 import {
   ACCESS_REQUEST_RESPONSE_FORMAT,
   ACCESS_REQUEST_SYSTEM_PROMPT,
+  AI_RECOMMENDATION_APPROVE,
+  AI_RECOMMENDATION_DENY,
   DEFAULT_OPENAI_MODEL,
   DEFAULT_TEMPERATURE,
   OPENAI_ROLE_SYSTEM,
@@ -161,7 +163,9 @@ export class OpenAIService implements OnModuleInit {
       reason.toLowerCase().includes('hack') ||
       resource.toLowerCase().includes('hack');
     return {
-      recommendation: isSuspicious ? 'DENY' : 'APPROVE',
+      recommendation: isSuspicious
+        ? AI_RECOMMENDATION_DENY
+        : AI_RECOMMENDATION_APPROVE,
       reasoning: isSuspicious
         ? 'Suspicious keywords detected (Mock).'
         : `Standard operational request for ${subjectName} (Mock).`,

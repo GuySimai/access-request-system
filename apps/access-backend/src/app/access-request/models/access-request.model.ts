@@ -1,9 +1,27 @@
-import { Field, ObjectType, ID, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  ObjectType,
+  ID,
+  registerEnumType,
+  Float,
+} from '@nestjs/graphql';
 import { RequestStatus } from '@access/prisma';
 
 registerEnumType(RequestStatus, {
   name: 'RequestStatus',
 });
+
+@ObjectType()
+export class AiEvaluation {
+  @Field()
+  recommendation!: string;
+
+  @Field()
+  reasoning!: string;
+
+  @Field(() => Float)
+  confidenceScore!: number;
+}
 
 @ObjectType()
 export class AccessRequest {
@@ -30,6 +48,9 @@ export class AccessRequest {
 
   @Field({ nullable: true })
   decisionAt?: Date;
+
+  @Field(() => AiEvaluation, { nullable: true })
+  aiEvaluation?: AiEvaluation;
 
   @Field()
   createdAt!: Date;

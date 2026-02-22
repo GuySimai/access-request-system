@@ -1,6 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RequestStatus } from '@access/prisma';
 
+export class AiEvaluationResponseDto {
+  @ApiProperty({ example: 'APPROVE' })
+  recommendation!: string;
+
+  @ApiProperty({ example: 'Standard operational request' })
+  reasoning!: string;
+
+  @ApiProperty({ example: 0.95 })
+  confidenceScore!: number;
+}
+
 export class AccessRequestResponseDto {
   @ApiProperty({ example: 'uuid-123' })
   id!: string;
@@ -35,4 +46,7 @@ export class AccessRequestResponseDto {
 
   @ApiProperty({ example: '2026-02-20T09:00:00Z' })
   updatedAt!: Date;
+
+  @ApiProperty({ type: AiEvaluationResponseDto, nullable: true })
+  aiEvaluation?: AiEvaluationResponseDto | null;
 }

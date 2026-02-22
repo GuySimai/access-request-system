@@ -11,8 +11,9 @@ export interface UserMetadata {
 }
 
 export interface AiEvaluation {
-  score: number;
-  summary: string;
+  recommendation: string;
+  reasoning: string;
+  confidenceScore: number;
 }
 
 export interface AccessRequest {

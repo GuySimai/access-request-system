@@ -1,19 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { sdk } from '@sdk/access';
-import type { AccessRequest, UserMetadata } from '../types/access-request';
+import { AccessRequest, UserMetadata } from '../types/access-request';
 
-interface RawAccessRequest {
-  id: string;
-  status: AccessRequest['status'];
-  createdAt: string;
-  resource: string;
-  reason: string;
-  requestor: UserMetadata;
-  subject: UserMetadata;
+interface RawAccessRequest
+  extends Omit<AccessRequest, 'decidedBy' | 'aiEvaluation'> {
   approver?: UserMetadata;
   aiEvaluation?: {
-    confidenceScore: number;
+    recommendation: string;
     reasoning: string;
+    confidenceScore: number;
   };
 }
 
@@ -37,12 +32,6 @@ export const useAccessRequests = (
           ({
             ...request,
             decidedBy: request.approver,
-            aiEvaluation: request.aiEvaluation
-              ? {
-                  score: request.aiEvaluation.confidenceScore,
-                  summary: request.aiEvaluation.reasoning,
-                }
-              : undefined,
           } as AccessRequest)
       );
     },
