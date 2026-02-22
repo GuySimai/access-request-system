@@ -1,106 +1,137 @@
-# New Nx Repository
+# Access Request System
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+An internal service for managing application access requests with AI-powered evaluation.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Architecture Diagram
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-## Finish your Nx platform setup
+```mermaid
+graph TD
+    %% Styling
+    classDef frontend fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef backend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef infra fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    classDef external fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#4a148c
 
-🚀 [Finish setting up your workspace](https://cloud.nx.app/setup/connect-workspace/manual?accessToken=undefined&source=create-nx-workspace-success-ci-setup) to get faster builds with remote caching, distributed task execution, and self-healing CI. [Learn more about Nx Cloud](https://nx.dev/ci/intro/why-nx-cloud).
-## Generate a library
+    subgraph "Frontend (React + Vite)"
+        UI[User Interface]:::frontend
+        SDK[Access SDK]:::frontend
+        UI --> SDK
+    end
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+    subgraph "Backend (NestJS)"
+        API[REST API]:::backend
+        GQL[GraphQL API]:::backend
+        Auth[Auth Module]:::backend
+        ARM[Access Request Module]:::backend
+        OAI[OpenAI Module]:::backend
+        Prisma[Prisma ORM]:::backend
+
+        SDK --> API
+        SDK --> GQL
+        API --> Auth
+        GQL --> ARM
+        ARM --> OAI
+        ARM --> Prisma
+        OAI --> Prisma
+    end
+
+    subgraph "Infrastructure"
+        DB[(PostgreSQL Database)]:::infra
+
+        Prisma --> DB
+    end
+
+    subgraph "External Services"
+        OpenAIAPI[OpenAI API]:::external
+        OAI -.-> OpenAIAPI
+    end
 ```
 
-## Run tasks
+## Key Architectural Decisions and Assumptions
 
-To build the library use:
+- **Monorepo Structure**: Built within an Nx monorepo.
+- **NestJS Backend**: Chosen for its modular architecture, strong TypeScript support, and built-in support for both REST and GraphQL.
+- **Dual API Approach**:
+  - **REST**: Used for authentication and potentially other standard operations.
+  - **GraphQL**: Used for complex data fetching of access requests, providing flexibility for the frontend.
+- **Prisma ORM**: Used for type-safe database access and easy schema migrations.
+- **AI-Powered Evaluation**: Integrates with OpenAI to provide automated recommendations for access requests based on requestor/subject metadata and the reason for the request.
+- **Mock AI Mode**: The system gracefully falls back to a mock evaluation if no OpenAI API key is provided, allowing for local development without external dependencies.
+- **Vibe Design System**: The frontend utilizes the `@vibe/core` design system for a consistent and modern UI.
+- **Authentication**: Implemented using **JWT (JSON Web Tokens)** with **Passport.js**. The system uses a stateless authentication flow where the token is stored on the client and sent with each request (including GraphQL) to authorize users based on their roles.
 
-```sh
-npx nx build pkg1
-```
+## How to Run the Service
 
-To run any task with Nx use:
+### Prerequisites
 
-```sh
-npx nx <target> <project-name>
-```
+- Node.js (v20+)
+- Docker and Docker Compose (for database)
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### Local Development
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/GuySimai/access-request-system.git
+    cd access-request-system
+    ```
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Set up environment variables**:
 
-## Versioning and releasing
+    - Create a `.env` file in `apps/access-backend/`:
 
-To version and release the library use
+      ```env
+      # Database Credentials
+      DB_USER=postgres
+      DB_PASSWORD=1234
+      DB_NAME=access_db
+      DB_PORT=5433
 
-```
-npx nx release
-```
+      # Prisma Connection URL (uses the variables above)
+      DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}?schema=public"
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+      # App Settings
+      PORT=3000
+      NODE_ENV=local
+      JWT_SECRET=monday_access_system_secret_2026
+      OPENAI_API_KEY=your_openai_api_key
+      ```
 
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+    - Create a `.env` file in `apps/access-frontend/`:
+      ```env
+      VITE_API_URL=http://localhost:3000/api
+      VITE_GQL_URL=http://localhost:3000/graphql
+      ```
 
-## Keep TypeScript project references up to date
+4.  **Start the database**:
+    ```bash
+    docker-compose -f apps/access-backend/docker-compose.yml up -d
+    ```
+5.  **Run database migrations and seed**:
+    ```bash
+    npx nx prisma-generate access-backend
+    npx nx prisma-deploy access-backend
+    npm run db:seed
+    ```
+6.  **Generate SDK Types**:
+    ```bash
+    npx nx typegen access-backend
+    ```
+7.  **Start the Backend**:
+    ```bash
+    npx nx serve access-backend
+    ```
+8.  **Start the Frontend**:
+    ```bash
+    npx nx serve access-frontend
+    ```
+    The frontend will be available at `http://localhost:5173`.
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+### Test Accounts
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+You can log in using the following seeded accounts:
 
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Set up CI (non-Github Actions CI)
-
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- **Admin** (`admin@monday.com` / Password: `1234`): Has an **APPROVER** role. Can view all access requests in the system and has the authority to approve or deny them.
+- **Employee** (`employee1@monday.com` / Password: `1234`): Has an **EMPLOYEE** role. Can create new access requests and view only the requests they have submitted or those where they are the subject.

@@ -88,10 +88,6 @@ export class AccessRequestService {
     take?: number;
   }) {
     try {
-      this.logger.log('getAccessRequests', {
-        payload: filters,
-      });
-
       const take = filters.take ?? 50;
       const skip = filters.skip ?? 0;
 
