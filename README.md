@@ -108,6 +108,9 @@ erDiagram
 - **Mock AI Mode**: The system gracefully falls back to a mock evaluation if no OpenAI API key is provided, allowing for local development without external dependencies.
 - **Vibe Design System**: The frontend utilizes the `@vibe/core` design system for a consistent and modern UI.
 - **Authentication**: Implemented using **JWT (JSON Web Tokens)** with **Passport.js**. The system uses a stateless authentication flow where the token is stored on the client and sent with each request (including GraphQL) to authorize users based on their roles.
+- **Testing**:
+  - **Unit Tests**: Implemented for core services and utilities.
+  - **E2E Tests**: Implemented using Cypress for critical user flows (e.g., login).
 
 ## How to Run the Service
 
@@ -184,3 +187,38 @@ You can log in using the following seeded accounts:
 
 - **Admin** (`admin@monday.com` / Password: `1234`): Has an **APPROVER** role. Can view all access requests in the system and has the authority to approve or deny them.
 - **Employee** (`employee1@monday.com` / Password: `1234`): Has an **EMPLOYEE** role. Can create new access requests and view only the requests they have submitted or those where they are the subject.
+
+## Example and Explanation of Deployment to AWS
+
+This section outlines a potential deployment strategy for the Access Request System on AWS, ensuring scalability, security, and high availability.
+
+```mermaid
+graph TD
+    subgraph "AWS Cloud"
+        ALB[Application Load Balancer]
+
+        subgraph "ECS Cluster (Fargate)"
+            Backend[Backend Container]
+            Frontend[Frontend Container (Static/SSR)]
+        end
+
+        RDS[(Amazon RDS - PostgreSQL)]
+        Secrets[AWS Secrets Manager]
+        CloudWatch[Amazon CloudWatch]
+    end
+
+    User((User)) --> ALB
+    ALB --> Frontend
+    ALB --> Backend
+    Backend --> RDS
+    Backend -.-> Secrets
+    Backend -.-> CloudWatch
+```
+
+### Key Components:
+
+- **Amazon ECS (Elastic Container Service) with Fargate**: Used to run the Dockerized backend and frontend applications in a serverless manner, removing the need to manage underlying EC2 instances.
+- **Application Load Balancer (ALB)**: Distributes incoming traffic between the frontend and backend services and handles SSL termination.
+- **Amazon RDS (Relational Database Service)**: A managed PostgreSQL database service that provides automated backups, patching, and high availability.
+- **AWS Secrets Manager**: Securely stores sensitive information like database credentials and API keys (e.g., OpenAI API Key), injecting them into the application at runtime.
+- **Amazon CloudWatch**: Collects logs and metrics from the application for monitoring and troubleshooting.
