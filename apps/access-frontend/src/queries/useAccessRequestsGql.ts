@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { GraphQLClient, gql } from 'graphql-request';
-import { AccessRequest } from '../types/access-request';
+import type { AccessRequest } from '../types/access-request';
 
 const GET_ACCESS_REQUESTS = gql`
   query GetAccessRequests(
