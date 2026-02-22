@@ -26,7 +26,7 @@ import {
 } from '../../../../constants/access-request';
 import { TABLE_COLUMNS } from './constants';
 import type { RequestsTableProps } from './types';
-import { AccessRequest } from '../../../../types/access-request';
+import type { AccessRequest } from '../../../../types/access-request';
 
 export const RequestsTable: React.FC<RequestsTableProps> = ({
   requests,

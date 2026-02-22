@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { sdk } from '@sdk/access';
-import { AccessRequest, UserMetadata } from '../types/access-request';
+import type { AccessRequest, UserMetadata } from '../types/access-request';
 
 interface RawAccessRequest
   extends Omit<AccessRequest, 'decidedBy' | 'aiEvaluation'> {

@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": ["@access/prisma", "@/*"],
+            "allow": ["@access/prisma", "@/App.tsx"],
             "depConstraints": [
               {
                 "sourceTag": "*",

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { sdk } from '@sdk/access';
-import { useAuth, User } from '../providers/AuthProvider';
+import { useAuth, type User } from '../providers/AuthProvider';
 
 export const useLogin = () => {
   const { login } = useAuth();

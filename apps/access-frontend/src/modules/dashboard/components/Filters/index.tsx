@@ -3,7 +3,7 @@ import { Flex, Box, TextField, Button, Dropdown } from '@vibe/core';
 import { Search, Filter, Erase } from '@vibe/icons';
 import { STATUS_OPTIONS } from './constants';
 import type { FiltersProps } from './types';
-import { RequestStatus } from '../../../../types/access-request';
+import type { RequestStatus } from '../../../../types/access-request';
 
 export const FiltersComponent: React.FC<FiltersProps> = ({
   status,
