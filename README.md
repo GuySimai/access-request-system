@@ -188,37 +188,54 @@ You can log in using the following seeded accounts:
 - **Admin** (`admin@monday.com` / Password: `1234`): Has an **APPROVER** role. Can view all access requests in the system and has the authority to approve or deny them.
 - **Employee** (`employee1@monday.com` / Password: `1234`): Has an **EMPLOYEE** role. Can create new access requests and view only the requests they have submitted or those where they are the subject.
 
-## Example and Explanation of Deployment to AWS
+## Example and Explanation of Deployment to AWS (Kubernetes & ArgoCD)
 
-This section outlines a potential deployment strategy for the Access Request System on AWS, ensuring scalability, security, and high availability.
+This section outlines a modern GitOps deployment strategy for the Access Request System on AWS using Kubernetes (EKS) and ArgoCD.
 
 ```mermaid
 graph TD
-    subgraph "AWS Cloud"
-        ALB[Application Load Balancer]
-
-        subgraph "ECS Cluster (Fargate)"
-            Backend[Backend Container]
-            Frontend[Frontend Container (Static/SSR)]
-        end
-
-        RDS[(Amazon RDS - PostgreSQL)]
-        Secrets[AWS Secrets Manager]
-        CloudWatch[Amazon CloudWatch]
+    subgraph "CI/CD Pipeline"
+        Dev[Developer] -->|Push Code| GitHub[GitHub Repo]
+        GitHub -->|Trigger CI| CI[CI Pipeline (GitHub Actions)]
+        CI -->|Build & Push Image| ECR[Amazon ECR]
+        CI -->|Update Manifest| GitHub
     end
 
-    User((User)) --> ALB
-    ALB --> Frontend
-    ALB --> Backend
-    Backend --> RDS
-    Backend -.-> Secrets
-    Backend -.-> CloudWatch
+    subgraph "AWS Cloud"
+        subgraph "EKS Cluster (Kubernetes)"
+            ArgoCD[ArgoCD Controller]
+
+            subgraph "Application Namespace"
+                Pod[App Pods]
+                K8sSecret[K8s Secrets]
+            end
+        end
+
+        SSM[AWS Systems Manager\nParameter Store]
+        ESO[External Secrets Operator]
+    end
+
+    ArgoCD -- "Watches & Syncs" --> GitHub
+    ArgoCD -- "Deploys" --> Pod
+
+    SSM -- "Syncs Secrets" --> ESO
+    ESO -- "Creates" --> K8sSecret
+    K8sSecret -.-> Pod
 ```
 
-### Key Components:
+### Deployment Flow:
 
-- **Amazon ECS (Elastic Container Service) with Fargate**: Used to run the Dockerized backend and frontend applications in a serverless manner, removing the need to manage underlying EC2 instances.
-- **Application Load Balancer (ALB)**: Distributes incoming traffic between the frontend and backend services and handles SSL termination.
-- **Amazon RDS (Relational Database Service)**: A managed PostgreSQL database service that provides automated backups, patching, and high availability.
-- **AWS Secrets Manager**: Securely stores sensitive information like database credentials and API keys (e.g., OpenAI API Key), injecting them into the application at runtime.
-- **Amazon CloudWatch**: Collects logs and metrics from the application for monitoring and troubleshooting.
+1.  **CI Process**:
+
+    - Code is pushed to **GitHub**.
+    - A CI pipeline (e.g., GitHub Actions) builds the Docker image and pushes it to **Amazon ECR**.
+    - The pipeline updates the Kubernetes manifests (Helm/Kustomize) in the repository with the new image tag.
+
+2.  **CD Process (GitOps)**:
+
+    - **ArgoCD**, running inside the **EKS (Kubernetes)** cluster, detects the change in the GitHub repository.
+    - It automatically syncs the cluster state to match the new configuration, deploying the new version of the application pods.
+
+3.  **Secrets Management**:
+    - Sensitive data (DB credentials, API keys) is managed in **AWS Systems Manager Parameter Store**.
+    - An **External Secrets Operator** (or similar mechanism) running in the cluster syncs these values into native **Kubernetes Secrets**, which are then mounted into the application pods.
