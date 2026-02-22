@@ -50,7 +50,7 @@ graph TD
 
 ```mermaid
 erDiagram
-    Employee ||--o{ AccessRequest : "manages (requests/approves)"
+    Employee ||--o{ AccessRequest : ""
     Employee ||--|| EmployeeMetadata : "has"
 
     AccessRequest ||--|| AiEvaluation : "has"
