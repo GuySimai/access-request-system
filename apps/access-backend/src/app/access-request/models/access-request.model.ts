@@ -5,11 +5,30 @@ import {
   registerEnumType,
   Float,
 } from '@nestjs/graphql';
-import { RequestStatus } from '@access/prisma';
+import { RequestStatus, Role } from '@access/prisma';
 
 registerEnumType(RequestStatus, {
   name: 'RequestStatus',
 });
+
+registerEnumType(Role, {
+  name: 'Role',
+});
+
+@ObjectType()
+export class Employee {
+  @Field(() => ID)
+  id!: string;
+
+  @Field()
+  email!: string;
+
+  @Field()
+  name!: string;
+
+  @Field(() => Role)
+  role!: Role;
+}
 
 @ObjectType()
 export class AiEvaluation {
@@ -28,8 +47,14 @@ export class AccessRequest {
   @Field(() => ID)
   id!: string;
 
+  @Field(() => Employee)
+  requestor!: Employee;
+
   @Field()
   requestorId!: string;
+
+  @Field(() => Employee)
+  subject!: Employee;
 
   @Field()
   subjectId!: string;
@@ -42,6 +67,9 @@ export class AccessRequest {
 
   @Field(() => RequestStatus)
   status!: RequestStatus;
+
+  @Field(() => Employee, { nullable: true })
+  approver?: Employee;
 
   @Field({ nullable: true })
   decisionBy?: string;

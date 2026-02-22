@@ -20,7 +20,10 @@ import {
   NavigationChevronRight,
 } from '@vibe/icons';
 import { getStatusColor, getConfidenceColor, formatDate } from './utils';
-import { REQUEST_STATUS, USER_ROLE } from '../../../../constants/access-request';
+import {
+  REQUEST_STATUS,
+  USER_ROLE,
+} from '../../../../constants/access-request';
 import { TABLE_COLUMNS } from './constants';
 import type { RequestsTableProps } from './types';
 import { AccessRequest } from '../../../../types/access-request';
