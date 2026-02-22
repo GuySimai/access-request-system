@@ -1,7 +1,7 @@
 import { ChatMessage } from './types';
 import { AI_RECOMMENDATIONS } from '../constants';
 import { AiRecommendation } from './types';
-import { EmployeeMetadata } from '@prisma/client';
+import { EmployeeMetadata } from '@access/prisma';
 
 export const getAccessRequestUserPrompt = (
   requestorEmail: string,

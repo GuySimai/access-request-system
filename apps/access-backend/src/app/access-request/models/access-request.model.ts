@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID, registerEnumType } from '@nestjs/graphql';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus } from '@access/prisma';
 
 registerEnumType(RequestStatus, {
   name: 'RequestStatus',

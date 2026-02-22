@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../db/prisma.service';
-import { Employee } from '@prisma/client';
+import { Employee } from '@access/prisma';
 import { LoginResponseDto } from './dto/response/login-response.dto';
 
 @Injectable()

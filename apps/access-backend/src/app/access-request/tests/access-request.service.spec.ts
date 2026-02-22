@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccessRequestService } from '../access-request.service';
 import { PrismaService } from '../../db/prisma.service';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus, Employee } from '@access/prisma';
 import { NotFoundException } from '@nestjs/common';
 import { OpenAIService } from '../../openai/openai.service';
 
@@ -43,7 +43,11 @@ describe('AccessRequestService', () => {
   });
 
   describe('createAccessRequest', () => {
-    const mockRequestor = { id: 'req-1', email: 'req@monday.com', name: 'Req' };
+    const mockRequestor: Partial<Employee> = {
+      id: 'req-1',
+      email: 'req@monday.com',
+      name: 'Req',
+    };
     const mockDto = {
       subjectEmail: 'sub@monday.com',
       resource: 'res-1',
@@ -58,7 +62,7 @@ describe('AccessRequestService', () => {
       });
       mockPrisma.accessRequest.create.mockResolvedValue({ id: 'acc-1' });
 
-      await service.createAccessRequest(mockRequestor as any, mockDto);
+      await service.createAccessRequest(mockRequestor as Employee, mockDto);
 
       expect(prisma.employee.findUnique).toHaveBeenCalledWith({
         where: { email: 'sub@monday.com' },
@@ -78,7 +82,7 @@ describe('AccessRequestService', () => {
       mockPrisma.employee.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.createAccessRequest(mockRequestor as any, mockDto)
+        service.createAccessRequest(mockRequestor as Employee, mockDto)
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -103,7 +107,10 @@ describe('AccessRequestService', () => {
 
   describe('handleAccessRequestDecision', () => {
     it('should update the request status', async () => {
-      const mockApprover = { id: 'app-1', email: 'app@monday.com' };
+      const mockApprover: Partial<Employee> = {
+        id: 'app-1',
+        email: 'app@monday.com',
+      };
       mockPrisma.accessRequest.update.mockResolvedValue({
         id: '1',
         status: RequestStatus.APPROVED,
@@ -111,7 +118,7 @@ describe('AccessRequestService', () => {
 
       const result = await service.handleAccessRequestDecision(
         '1',
-        mockApprover as any,
+        mockApprover as Employee,
         RequestStatus.APPROVED
       );
 

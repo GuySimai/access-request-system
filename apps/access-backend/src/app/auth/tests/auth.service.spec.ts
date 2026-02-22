@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { PrismaService } from '../../db/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from '@prisma/client';
+import { Employee, Role } from '@access/prisma';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -59,7 +59,7 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return an access token and user info', async () => {
-      const mockEmployee = {
+      const mockEmployee: Partial<Employee> = {
         id: '1',
         email: 'test@monday.com',
         name: 'Test',
@@ -68,7 +68,7 @@ describe('AuthService', () => {
       const mockToken = 'signed-jwt-token';
       mockJwt.sign.mockReturnValue(mockToken);
 
-      const result = await service.login(mockEmployee as any);
+      const result = await service.login(mockEmployee as Employee);
 
       expect(result).toEqual({
         access_token: mockToken,

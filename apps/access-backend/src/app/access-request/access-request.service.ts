@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
 import { CreateAccessRequestDto } from './dto/request/create-access-request.dto';
-import { RequestStatus, Employee } from '@prisma/client';
+import { RequestStatus, Employee } from '@access/prisma';
 import { OpenAIService } from '../openai/openai.service';
 
 @Injectable()
@@ -81,8 +81,8 @@ export class AccessRequestService {
   }
 
   async getAccessRequests(filters: {
-    requestorId?: string;
-    subjectId?: string;
+    requestorEmail?: string;
+    subjectEmail?: string;
     status?: RequestStatus;
     skip?: number;
     take?: number;
@@ -97,8 +97,12 @@ export class AccessRequestService {
 
       return await this.prisma.accessRequest.findMany({
         where: {
-          requestorId: filters.requestorId,
-          subjectId: filters.subjectId,
+          requestor: filters.requestorEmail
+            ? { email: filters.requestorEmail }
+            : undefined,
+          subject: filters.subjectEmail
+            ? { email: filters.subjectEmail }
+            : undefined,
           status: filters.status,
         },
         take,
