@@ -2,7 +2,7 @@
 
 An internal service for managing application access requests with AI-powered evaluation.
 
-## Architecture Diagram
+## General Architecture Diagram
 
 ```mermaid
 graph TD
@@ -22,16 +22,15 @@ graph TD
         API[REST API]:::backend
         GQL[GraphQL API]:::backend
         Auth[Auth Module]:::backend
-        ARM[Access Request Module]:::backend
         OAI[OpenAI Module]:::backend
         Prisma[Prisma ORM]:::backend
 
         SDK --> API
         SDK --> GQL
         API --> Auth
-        GQL --> ARM
-        ARM --> OAI
-        ARM --> Prisma
+        GQL --> Auth
+        Auth --> OAI
+        Auth --> Prisma
         OAI --> Prisma
     end
 
@@ -45,6 +44,56 @@ graph TD
         OpenAIAPI[OpenAI API]:::external
         OAI -.-> OpenAIAPI
     end
+```
+
+## Database Schema Diagram (ERD)
+
+```mermaid
+erDiagram
+    Employee ||--o{ AccessRequest : "manages (requests/approves)"
+    Employee ||--|| EmployeeMetadata : "has"
+
+    AccessRequest ||--|| AiEvaluation : "has"
+
+    Employee {
+        String id PK
+        String email UK
+        String name
+        String password
+        Role role "EMPLOYEE | APPROVER"
+        DateTime createdAt
+    }
+
+    EmployeeMetadata {
+        String id PK
+        String employeeId FK
+        String department
+        String jobTitle
+        Int tenureMonths
+        DateTime updatedAt
+    }
+
+    AccessRequest {
+        String id PK
+        String requestorId FK
+        String subjectId FK
+        String resource
+        String reason
+        RequestStatus status "PENDING | APPROVED | DENIED"
+        String decisionBy FK
+        DateTime decisionAt
+        DateTime createdAt
+        DateTime updatedAt
+    }
+
+    AiEvaluation {
+        String id PK
+        String requestId FK
+        String recommendation
+        String reasoning
+        Float confidenceScore
+        DateTime createdAt
+    }
 ```
 
 ## Key Architectural Decisions and Assumptions
