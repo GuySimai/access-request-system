@@ -13,6 +13,7 @@
     },
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
         "command": "npm run build",
         "cwd": "apps/access-frontend"
@@ -20,6 +21,7 @@
     },
     "lint": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
         "command": "npm run lint",
         "cwd": "apps/access-frontend"
@@ -27,8 +29,25 @@
     },
     "preview": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
         "command": "npm run preview",
+        "cwd": "apps/access-frontend"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "npm run test",
+        "cwd": "apps/access-frontend"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "npm run typecheck",
         "cwd": "apps/access-frontend"
       }
     }

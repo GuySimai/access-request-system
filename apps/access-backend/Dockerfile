@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS base
+FROM node:lts AS base
 ENV APP_NAME=access-backend
 
 WORKDIR /app
@@ -12,11 +12,12 @@ RUN npx nx build access-backend
 
 
 ###### PRODUCTION ######
-FROM node:lts-alpine AS runtime
+FROM node:lts AS runtime
 
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=build /app/dist/apps/access-backend .
+COPY --from=build /app/apps/access-backend/dist .
+COPY --from=build /app/apps/access-backend/package.json .
 RUN npm install --only=production
 COPY --from=build /app/apps/access-backend/prisma ./apps/access-backend/prisma
 CMD [ "node", "main.js" ]

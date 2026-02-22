@@ -13,6 +13,9 @@
       },
       "build": {
         "executor": "nx:run-commands",
+        "dependsOn": [
+          "prisma-generate"
+        ],
         "options": {
           "command": "webpack-cli build",
           "args": [
@@ -83,6 +86,9 @@
         }
       },
       "test": {
+        "dependsOn": [
+          "prisma-generate"
+        ],
         "options": {
           "passWithNoTests": true
         }
